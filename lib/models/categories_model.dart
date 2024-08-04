@@ -1,4 +1,6 @@
-class CategoryModel {
+import 'package:flutter/material.dart';
+
+class CategoryModel with ChangeNotifier {
   int? id;
   String? name;
   String? image;
@@ -23,5 +25,9 @@ class CategoryModel {
     data['creationAt'] = creationAt;
     data['updatedAt'] = updatedAt;
     return data;
+  }
+
+  static List<CategoryModel> categoriesFromJSON(List categoryJSON) {
+    return categoryJSON.map((data) => CategoryModel.fromJson(data)).toList();
   }
 }

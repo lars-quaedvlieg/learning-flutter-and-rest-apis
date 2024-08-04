@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:store_api_flutter_course/screens/home_screen.dart';
 
 import '../models/products_model.dart';
@@ -26,8 +27,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
 
   Future<void> getProducts() async {
     productsList = await APIHandler.getAllProducts();
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -36,22 +36,22 @@ class _FeedsScreenState extends State<FeedsScreen> {
       appBar: AppBar(
         title: const Text('All Products'),
       ),
-      body: productsList.isEmpty ? Container() : GridView.builder(
-        itemCount: productsList.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          // Portrait mode, not fully responsive
-          crossAxisCount: 2,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          childAspectRatio: 0.67,
-        ),
-        itemBuilder: (context, idx) {
-          return FeedsWidget(
-            title: productsList[idx].title.toString(),
-            imageUrl: productsList[idx].images![0],
-          );
-        },
-      ),
+      body: productsList.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              itemCount: productsList.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                // Portrait mode, not fully responsive
+                crossAxisCount: 2,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
+                childAspectRatio: 0.67,
+              ),
+              itemBuilder: (context, idx) {
+                return ChangeNotifierProvider.value(
+                    value: productsList[idx], child: const FeedsWidget());
+              },
+            ),
     );
   }
 }

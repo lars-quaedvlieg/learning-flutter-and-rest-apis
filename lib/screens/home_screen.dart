@@ -22,7 +22,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _textEditingController;
-  List<ProductModel> productsList = [];
+
+  // List<ProductModel> productsList = [];
 
   @override
   void initState() {
@@ -36,17 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    getProducts();
-    super.didChangeDependencies();
-  }
-
-  Future<void> getProducts() async {
-    productsList = await APIHandler.getAllProducts();
-    setState(() {
-    });
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   getProducts();
+  //   super.didChangeDependencies();
+  // }
+  //
+  // Future<void> getProducts() async {
+  //   productsList = await APIHandler.getAllProducts();
+  //   setState(() {
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +170,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  productsList.isEmpty ? Container() : FeedsGridWidget(productsList: productsList),
+                  FutureBuilder<List<ProductModel>>(
+                      future: APIHandler.getAllProducts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text("An error occurred ${snapshot.error}");
+                        } else if (snapshot.data == null) {
+                          return const Text("No products have been added yet");
+                        }
+                        return FeedsGridWidget(productsList: snapshot.data!);
+                      }),
                 ],
               ))),
             ],

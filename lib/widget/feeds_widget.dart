@@ -2,16 +2,19 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:store_api_flutter_course/consts/global_colors.dart';
+import 'package:store_api_flutter_course/models/products_model.dart';
 
 import '../screens/product_details.dart';
 
 class FeedsWidget extends StatelessWidget {
-  const FeedsWidget({super.key, required this.title, required this.imageUrl});
-  final String title, imageUrl;
+  const FeedsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ProductModel productModelProvider =
+        Provider.of<ProductModel>(context);
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(2.0),
@@ -45,7 +48,8 @@ class FeedsWidget extends StatelessWidget {
                                 ),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: "168.00",
+                                      text:
+                                          "${productModelProvider.price}",
                                       style: TextStyle(
                                         color: lightTextColor,
                                         fontWeight: FontWeight.w600,
@@ -68,14 +72,14 @@ class FeedsWidget extends StatelessWidget {
                         color: Colors.red,
                         size: 28,
                       ),
-                      imageUrl: imageUrl,
+                      imageUrl: productModelProvider.images![0],
                       boxFit: BoxFit.fill,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(title,
+                    child: Text(productModelProvider.title.toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: const TextStyle(
