@@ -28,7 +28,8 @@ class FeedsWidget extends StatelessWidget {
                     context,
                     PageTransition(
                       type: PageTransitionType.rightToLeft,
-                      child: const ProductDetails(),
+                      child: ProductDetails(
+                          id: productModelProvider.id.toString()),
                     ));
               },
               child: Column(
@@ -48,8 +49,7 @@ class FeedsWidget extends StatelessWidget {
                                 ),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text:
-                                          "${productModelProvider.price}",
+                                      text: "${productModelProvider.price}",
                                       style: TextStyle(
                                         color: lightTextColor,
                                         fontWeight: FontWeight.w600,
